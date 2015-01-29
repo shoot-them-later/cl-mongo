@@ -206,7 +206,7 @@ and a new default connection is registered."))
 ;; until out is received...
 ;;
 
-(defmethod mongo-message* ((mongo mongo) (message array) &key (timeout 5))
+(defmethod mongo-message* ((mongo mongo) (message array) &key (timeout 0))
   (write-sequence message (mongo-stream mongo))
   (force-output (mongo-stream mongo))
   (unless (zerop timeout)
@@ -214,7 +214,7 @@ and a new default connection is registered."))
     (test-for-readback (mongo-stream mongo) timeout)
     (read-back mongo)))
 
-(defmethod mongo-message ((mongo mongo) (message array) &key (timeout 5))
+(defmethod mongo-message ((mongo mongo) (message array) &key (timeout 0))
   (handler-case 
       (mongo-message* mongo message :timeout timeout)
     (error (c)
